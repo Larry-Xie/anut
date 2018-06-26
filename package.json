@@ -1,35 +1,34 @@
 {
-  "name": "ngentest",
-  "version": "0.2.1",
-  "description": "Angular5+ Unit Test Generator For Components, Directive, Services, and Pipes",
-  "main": "index.js",
-  "bin": {
-    "gentest": "./index.js",
-    "ngentest": "./index.js"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/allenhwkim/ng-gen-test.git"
-  },
-  "keywords": [
-    "angular",
-    "generate",
-    "unit",
-    "test",
-    "cli"
-  ],
-  "author": "Allen Kim <allenhwkim@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/allenhwkim/ng-gen-test/issues"
-  },
-  "homepage": "https://github.com/allenhwkim/ng-gen-test#readme",
-  "dependencies": {
-    "ejs": "^2.6.1",
-    "typescript-parser": "^2.4.0",
-    "yargs": "^11.0.0"
-  }
+    "name": "anut",
+    "version": "0.0.1",
+    "description": "Angular Unit Test Generator. Based on https://github.com/allenhwkim/ngentest",
+    "main": "index.js",
+    "bin": {
+        "anut": "./index.js"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Larry-Xie/anut.git"
+    },
+    "keywords": [
+        "angular",
+        "generate",
+        "unit",
+        "test",
+        "cli"
+    ],
+    "author": "Larry Xie <clisely@gmail.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Larry-Xie/anut/issues"
+    },
+    "homepage": "https://github.com/Larry-Xie/anut#readme",
+    "dependencies": {
+        "ejs": "^2.6.1",
+        "typescript-parser": "^2.4.0",
+        "yargs": "^11.0.0"
+    }
 }
