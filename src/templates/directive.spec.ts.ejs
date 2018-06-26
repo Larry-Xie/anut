@@ -11,45 +11,44 @@ import {<%- imports[key].map(el => `${el}`).join(', ') -%>} from '<%- key -%>';
 <% } -%>
 
 @Component({
-  template: `
-    <DIRECTIVE-SELECTOR <%- inputs.attributes.join(' ') %> <%- outputs.attributes.join(' ') %>></DIRECTIVE-SELECTOR>
-  `
+    template: `
+        <DIRECTIVE-SELECTOR <%- inputs.attributes.join(' ') %> <%- outputs.attributes.join(' ') %>></DIRECTIVE-SELECTOR>
+    `
 })
 class DirectiveTestComponent {
 <% inputs.properties.forEach(function(prop) { -%>
-  <%- prop -%>
+    <%- prop -%>
 <% }) %>
 <% outputs.properties.forEach(function(prop) { %>
-  <%- prop -%>
+    <%- prop -%>
 <% }) %>
 }
 
 describe('<%= className %>', () => {
-  let fixture: ComponentFixture<DirectiveTestComponent>;
-  let component: DirectiveTestComponent;
-  let directiveEl;
-  let directive;
+    let fixture: ComponentFixture<DirectiveTestComponent>;
+    let component: DirectiveTestComponent;
+    let directiveEl;
+    let directive;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [<%= className %>, DirectiveTestComponent],
-      providers: [<% for(var key in providers) { %>
-        <%- providers[key]+ ',' %><% } %>
-      ]
-    }).compileComponents();
-    fixture = TestBed.createComponent(DirectiveTestComponent);
-    component = fixture.componentInstance;
-    directiveEl = fixture.debugElement.query(By.directive(<%= className %>));
-    directive = directiveEl.injector.get(<%= className %>);
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+        declarations: [<%= className %>, DirectiveTestComponent],
+        providers: [<% for(var key in providers) { %>
+            <%- providers[key]+ ',' %><% } %>
+        ]
+        }).compileComponents();
+        fixture = TestBed.createComponent(DirectiveTestComponent);
+        component = fixture.componentInstance;
+        directiveEl = fixture.debugElement.query(By.directive(<%= className %>));
+        directive = directiveEl.injector.get(<%= className %>);
+    }));
 
-  it("should run a directive", async(() => {
-    expect(component).toBeTruthy();
-    expect(directive).toBeTruthy();
-  }));
+    it("should run a directive", async(() => {
+        expect(component).toBeTruthy();
+        expect(directive).toBeTruthy();
+    }));
 
-  <% for(var key in functionTests) { -%>
-  <%- functionTests[key] -%>
-  <% } -%>
-
+    <% for(var key in functionTests) { -%>
+    <%- functionTests[key] -%>
+    <% } -%>
 });

@@ -3,18 +3,17 @@ import {<%- imports[key].map(el => `${el}`).join(', ') -%>} from '<%- key -%>';
 <% } -%>
 
 describe('<%= className %>', () => {
-  let service;
+    let service;
 
-  <% for(var key in mocks) { -%>
-  <%- mocks[key] -%>
-  <% } -%>
+    <% for(var key in mocks) { -%>
+    <%- mocks[key] -%>
+    <% } -%>
 
-  beforeEach(() => {
-    service = new <%= className %>(<%= classParams.join(',') %>);
-  });
+    beforeEach(() => {
+        service = new <%= className %>(<%= classParams.join(',') %>);
+    });
 
-  <% for(var key in functionTests) { -%>
-  <%- functionTests[key] -%>
-  <% } -%>
-
+    <% for(var key in functionTests) { -%>
+    <%- functionTests[key] -%>
+    <% } -%>
 });
