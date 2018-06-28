@@ -11,7 +11,6 @@ var util = require('./src/lib/util.js');
 var getDirectiveData = require('./src/get-directive-data.js');
 var getInjectableData = require('./src/get-injectable-data.js');
 var getPipeData = require('./src/get-pipe-data.js');
-var getDefaultData = require('./src/get-default-data.js');
 
 var argv = yargs.usage('Usage: $0 <angular-typescript-file> [options]')
     .example('$0 my.component.ts', 'generate Angular unit test for my.component.ts')
@@ -23,8 +22,10 @@ var typescript = fs.readFileSync(path.resolve(tsFile), 'utf8');
 
 parseTypescript(typescript).then((tsParsed) => {
     const angularType = util.getAngularType(typescript); // Component, Directive, Injectable, Pipe, or undefined
-    console.error('ERROR: Cannot get the type of this file');
-    if (!angularType) return;
+    if (!angularType) {
+        console.error('ERROR: Cannot get the type of this file');
+        return;
+    }
     const ejsTemplate = util.getEjsTemplate(angularType);
     let ejsData;
     switch (angularType) {
