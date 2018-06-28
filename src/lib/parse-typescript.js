@@ -63,7 +63,7 @@ module.exports = async function parseTypescript(fileOrTs, className) {
     }
 
     // properties 
-    klass.properties.forEach(prop => {
+    klass.properties.forEach((prop) => {
         ret.properties[prop.name] = {
             type: prop.type,
             body: fileContents.substring(prop.start, prop.end)
@@ -71,7 +71,7 @@ module.exports = async function parseTypescript(fileOrTs, className) {
     });
 
     // methods
-    klass.methods.forEach(method => {
+    klass.methods.forEach((method) => {
         ret.methods[method.name] = {
             type: method.type,
             parameters: method.parameters.map(param => ({
