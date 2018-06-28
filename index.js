@@ -23,6 +23,8 @@ var typescript = fs.readFileSync(path.resolve(tsFile), 'utf8');
 
 parseTypescript(typescript).then((tsParsed) => {
     const angularType = util.getAngularType(typescript); // Component, Directive, Injectable, Pipe, or undefined
+    console.error('ERROR: Cannot get the type of this file');
+    if (!angularType) return;
     const ejsTemplate = util.getEjsTemplate(angularType);
     let ejsData;
     switch (angularType) {
@@ -37,7 +39,6 @@ parseTypescript(typescript).then((tsParsed) => {
             ejsData = getPipeData(tsParsed, tsFile);
             break;
         default:
-            ejsData = getDefaultData(tsParsed, tsFile);
             break;
     }
 

@@ -19,7 +19,6 @@ function getEjsTemplate(type) {
             ejsFile = path.join(__dirname, '../', 'templates', `${typeLower}.spec.ts.ejs`);
             break;
         default:
-            ejsFile = path.join(__dirname, '../', 'templates', `default.spec.ts.ejs`);
             break;
     }
 
@@ -28,9 +27,9 @@ function getEjsTemplate(type) {
 
 function getImportLib(mports, className) {
     let lib;
-    mports.forEach(mport => {
+    mports.forEach((mport) => {
         if (mport.specifiers) {
-            mport.specifiers.forEach(el => { // e.g. 'Inject', 'Inject as foo'
+            mport.specifiers.forEach((el) => { // e.g. 'Inject', 'Inject as foo'
                 if (el.indexOf(className) !== -1) {
                     lib = mport.from; // e.g. '@angular/core'
                 }
