@@ -27,7 +27,8 @@ export class MyComponent implements OnInit {
     constructor(
         private element: ElementRef,
         private renderer: Renderer2,
-        @Inject(PLATFORM_ID) private platformId: any) { }
+        @Inject(PLATFORM_ID) private platformId: any) {
+    }
 
     ngOnInit(): void {
         if (isPlatformBrowser(this.platformId)) {

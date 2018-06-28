@@ -27,7 +27,7 @@ module.exports = async function parseTypescript(fileOrTs, className) {
     ret.name = klass.name;
 
     // imports
-    parsed.imports.forEach(mport => {
+    parsed.imports.forEach((mport) => {
         let specifiers;
         //  { libraryName: '@angular/core', specifiers: [Array], ... }
         if (mport.constructor.name === 'NamedImport') {
@@ -49,21 +49,21 @@ module.exports = async function parseTypescript(fileOrTs, className) {
     let constructor = klass.ctor;
     if (constructor) {
         ret.constructor = {};
-        ret.constructor.parameters = constructor.parameters.map(param => {
+        ret.constructor.parameters = constructor.parameters.map((param) => {
             return {
                 name: param.name,
                 type: param.type,
                 body: fileContents.substring(param.start, param.end)
             };
         });
-        ret.constructor.body = fileContents
-            .substring(constructor.start, constructor.end)
-            .match(/{([\s\S]+)\}$/m)[1];
+        const body = fileContents.substring(constructor.start, constructor.end).match(/{([\s\S]+)\}$/m);
+        if (body) {
+            ret.constructor.body = body[1];
+        }
     }
 
     // properties 
     klass.properties.forEach(prop => {
-        console.log('prop........', prop);
         ret.properties[prop.name] = {
             type: prop.type,
             body: fileContents.substring(prop.start, prop.end)
