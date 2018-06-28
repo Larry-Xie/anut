@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+// Copyright © Citrix Systems, Inc.  All rights reserved.
 
 <% for(var key in imports) { -%>
 import {<%- imports[key].map(el => `${el}`).join(', ') -%>} from '<%- key -%>';
@@ -8,27 +8,39 @@ import {<%- imports[key].map(el => `${el}`).join(', ') -%>} from '<%- key -%>';
 <%- mocks[key] -%>
 <% } -%>
 
+
+@Pipe({
+    name: 'i18n'
+})
+class MockI18nPipe implements PipeTransform {
+    transform: (i18nKey: string, interpolationValues: object) => 'test';
+}
+
 describe('<%= className %>', () => {
     let fixture;
     let component;
 
-    beforeEach(() => {
+    beforeEach(async(() => {
         TestBed.configureTestingModule({
-        declarations: [
-            <%= className %>
-        ],
-        providers: [<% for(var key in providers) { %>
-            <%- providers[key]+ ',' %><% } %>
-        ]
+            declarations: [
+                <%= className %>,
+                MockI18nPipe
+            ],
+            providers: [<% for(var key in providers) { %>
+                <%- providers[key]+ ',' %><% } %>
+            ],
+            schemas: [
+                NO_ERRORS_SCHEMA
+            ]
         }).compileComponents();
+
         fixture = TestBed.createComponent(<%= className %>);
         component = fixture.debugElement.componentInstance;
-    });
+    }));
 
     it('should create a component', async(() => {
         expect(component).toBeTruthy();
     }));
-
     <% for(var key in functionTests) { -%>
     <%- functionTests[key] -%>
     <% } -%>

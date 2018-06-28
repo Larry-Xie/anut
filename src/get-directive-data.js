@@ -7,8 +7,9 @@ module.exports = function getDirectiveData(tsParsed, filePath, angularType) {
     let result = {
         className: tsParsed.name,
         imports: {
+            '@angular/core': ['Component', 'Directive', 'NO_ERRORS_SCHEMA', 'Pipe', 'PipeTransform'],
+            '@angular/core/testing': ['async', 'ComponentFixture', 'TestBed'],
             [`./${path.basename(filePath)}`.replace(/.ts$/, '')]: [tsParsed.name], // the directive itself
-            '@angular/core': ['Component', 'Directive']
         },
         inputs: {
             attributes: [],
@@ -23,11 +24,11 @@ module.exports = function getDirectiveData(tsParsed, filePath, angularType) {
         functionTests: {}
     };
 
-    //
-    // Iterate properties
-    // . if @Input, build input attributes and input properties
-    // . if @Outpu, build output attributes and output properties
-    //
+    /*
+        Iterate properties
+        . if @Input, build input attributes and input properties
+        . if @Output, build output attributes and output properties
+    */    
     for (var key in tsParsed.properties) {
         const prop = tsParsed.properties[key];
         if (prop.body.match(/@Input\(/)) {
@@ -42,21 +43,21 @@ module.exports = function getDirectiveData(tsParsed, filePath, angularType) {
         }
     }
 
-    //
-    // Iterate constructor parameters
-    //  . if this pattern, `@Inject(PLATFORM_ID)`,
-    //    . add Inject, PLATFORM_ID to result.imports
-    //    . create provider with value
-    //  . if type is found at tsParsed.imports, 
-    //    . add the type to result.imports
-    //    . if type is ElementRef,
-    //      . create a mock class
-    //      . add to result.providers with mock
-    //    . if source starts from './', which is a user-defined injectable
-    //      . create a mock class
-    //      . add te result.providers with mock 
-    //    . otherwise, add to result.providers
-    //
+    /* 
+        Iterate constructor parameters
+        . if this pattern, `@Inject(PLATFORM_ID)`,
+        . add Inject, PLATFORM_ID to result.imports
+        . create provider with value
+        . if type is found at tsParsed.imports, 
+        . add the type to result.imports
+        . if type is ElementRef,
+            . create a mock class
+            . add to result.providers with mock
+        . if source starts from './', which is a user-defined injectable
+            . create a mock class
+            . add te result.providers with mock 
+        . otherwise, add to result.providers
+    */
     tsParsed.constructor.parameters.forEach(param => { // name, type, body
         // handle @Inject(XXXXXXXXX)
         const importLib = getImportLib(tsParsed.imports, param.type);
@@ -76,7 +77,7 @@ module.exports = function getDirectiveData(tsParsed, filePath, angularType) {
             result.imports[importLib] = result.imports[importLib] || [];
             result.imports[importLib].push(param.type);
             result.mocks[param.type] = reIndent(`
-                class Mock${param.type} extends ${param.type} {
+                class Mock${param.type} {
                     constructor() { super(undefined); }
                     nativeElement = {}
                 }`
@@ -86,7 +87,7 @@ module.exports = function getDirectiveData(tsParsed, filePath, angularType) {
             result.imports[importLib] = result.imports[importLib] || [];
             result.imports[importLib].push(param.type);
             result.mocks[param.type] = reIndent(`
-                class Mock${param.type} extends ${param.type} {
+                class Mock${param.type} {
                 }`
             );
             result.providers[param.type] = `{provide: ${param.type}, useClass: Mock${param.type}}`;
@@ -97,11 +98,11 @@ module.exports = function getDirectiveData(tsParsed, filePath, angularType) {
         }
     });
 
-    //
-    // Iterate properties
-    //  . if property type is a windows type
-    //    then create mock with (windows<any>) with the value of `jest.fn()``
-    //
+    /*     
+        Iterate properties
+        . if property type is a windows type
+        then create mock with (windows<any>) with the value of `jest.fn()``
+    */
     for (var key in tsParsed.properties) {
         let prop = tsParsed.properties[key];
         let basicTypes = ['boolean', 'number', 'string', 'Array', 'any', 'void', 'null', 'undefined', 'never'];
@@ -113,10 +114,10 @@ module.exports = function getDirectiveData(tsParsed, filePath, angularType) {
         }
     }
 
-    //
-    // Iterate methods
-    //  . Javascript to call the function with parameter;
-    //
+    /*     
+        Iterate methods
+        . Javascript to call the function with parameter;
+    */
     for (var key in tsParsed.methods) {
         let method = tsParsed.methods[key];
         let parameters = method.parameters.map(el => el.name).join(', ');
@@ -126,7 +127,7 @@ module.exports = function getDirectiveData(tsParsed, filePath, angularType) {
             it('should run #${key}()', async(() => {
                 // ${js};
             }));
-        `, '  ');
+        `, '    ');
     }
 
     return result;

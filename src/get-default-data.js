@@ -3,7 +3,7 @@ var windowObjects = require('./lib/window-objects.js');
 
 module.exports = function getDirectiveData(tsParsed, filePath) {
     let result = {
-        clasName: tsParsed.name,
+        className: tsParsed.name,
         imports: {
             [`./${filePath}`.replace(/.ts$/, '')]: [tsParsed.name], // the directive itself
             '@angular/core': ['Directive']
