@@ -110,7 +110,9 @@ module.exports = function getDirectiveData(tsParsed, filePath, angularType) {
         if (importLib || basicTypes.includes(prop.type)) {
             continue;
         } else if (windowObjects.includes(prop.type)) {
-            result.mocks[prop.type] = reIndent(`(<any>window).${prop.type} = jest.fn();`);
+            result.mocks[prop.type] = reIndent(`
+                (<any>window).${prop.type} = jest.fn();
+            `);
         }
     }
 

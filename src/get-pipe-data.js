@@ -1,3 +1,4 @@
+var path = require('path');
 var getImportLib = require('./lib/util.js').getImportLib;
 var reIndent = require('./lib/util.js').reIndent;
 
@@ -5,15 +6,15 @@ module.exports = function getServiceData(tsParsed, filePath) {
     let result = {
         className: tsParsed.name,
         imports: {
-            [`./${filePath}`.replace(/.ts$/, '')]: [tsParsed.name] // the directive itself
+            [`./${path.basename(filePath)}`.replace(/.ts$/, '')]: [tsParsed.name] // the directive itself
         },
         functionTests: {}
     };
 
-    //
-    // Iterate methods
-    //  . Javascript to call the function with parameter;
-    //
+    /*     
+        Iterate methods
+        . Javascript to call the function with parameter;
+    */
     for (var key in tsParsed.methods) {
         let method = tsParsed.methods[key];
         let parameters = method.parameters.map(el => el.name);
@@ -25,7 +26,7 @@ module.exports = function getServiceData(tsParsed, filePath) {
                 it('should run #${key}()', async(() => {
                     // ${js};
                 }));
-            `, '  ')
+            `, '    ')
         };
     }
 

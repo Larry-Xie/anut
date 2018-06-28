@@ -1,3 +1,5 @@
+// Copyright © Citrix Systems, Inc.  All rights reserved.
+
 <% for(var key in imports) { -%>
 import {<%- imports[key].map(el => `${el}`).join(', ') -%>} from '<%- key -%>';
 <% } -%>
