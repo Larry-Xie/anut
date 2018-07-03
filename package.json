@@ -1,6 +1,6 @@
 {
     "name": "anut",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Angular Unit Test Generator. Based on https://github.com/allenhwkim/ngentest",
     "main": "index.js",
     "bin": {
