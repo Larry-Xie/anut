@@ -20,7 +20,7 @@ module.exports = async function parseTypescript(fileOrTs, className) {
     };
     let klass;
     if (className) {
-        klass = parsed.declarations.find(decl => decl.name === className);
+        klass = parsed.declarations.find((decl) => decl.name === className);
     } else {
         klass = parsed.declarations[0];
     }
@@ -28,7 +28,6 @@ module.exports = async function parseTypescript(fileOrTs, className) {
 
     // imports
     parsed.imports.forEach((mport) => {
-        let specifiers;
         //  { libraryName: '@angular/core', specifiers: [Array], ... }
         if (mport.constructor.name === 'NamedImport') {
             let specifiers = mport.specifiers.map(el => `${el.specifier}${el.alias ? ' as '+el.alias: ''}`);
@@ -62,25 +61,29 @@ module.exports = async function parseTypescript(fileOrTs, className) {
         }
     }
 
-    // properties 
-    klass.properties.forEach((prop) => {
-        ret.properties[prop.name] = {
-            type: prop.type,
-            body: fileContents.substring(prop.start, prop.end)
-        };
-    });
+    // properties
+    if (klass.properties && klass.properties.length) {
+        klass.properties.forEach((prop) => {
+            ret.properties[prop.name] = {
+                type: prop.type,
+                body: fileContents.substring(prop.start, prop.end)
+            };
+        });
+    }
 
     // methods
-    klass.methods.forEach((method) => {
-        ret.methods[method.name] = {
-            type: method.type,
-            parameters: method.parameters.map(param => ({
-                name: param.name,
-                type: param.type
-            })),
-            body: fileContents.substring(method.start, method.end).match(/{([\s\S]+)\}$/m)[1]
-        }
-    })
+    if (klass.methods && klass.methods.length) {
+        klass.methods.forEach((method) => {
+            ret.methods[method.name] = {
+                type: method.type,
+                parameters: method.parameters.map(param => ({
+                    name: param.name,
+                    type: param.type
+                })),
+                body: fileContents.substring(method.start, method.end).match(/{([\s\S]+)\}$/m)[1]
+            }
+        })
+    }
 
     return ret;
 }
